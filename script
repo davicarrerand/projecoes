@@ -1,0 +1,252 @@
+Você é um cientista de dados sênior especializado em previsão de séries temporais no contexto bancário (produção diária de produtos financeiros).
+
+Sua missão é gerar um único arquivo Python COMPLETO, altamente robusto, totalmente comentado e pronto para execução, que implemente um motor de projeção mensal baseado EXCLUSIVAMENTE em dados históricos.
+
+========================================
+CONTEXTO DO PROBLEMA
+========================================
+
+Eu tenho uma base CSV com as colunas:
+
+- anomesdia (int no formato yyyymmdd)
+- familia (string)
+- produto (string)
+- valor (produção diária)
+
+Tenho mais de 20 produtos, agrupados em famílias.
+
+Preciso projetar o valor total do mês para um determinado "anomes" (input do código, ex: 202604).
+
+A projeção deve:
+- usar apenas histórico (sem inputs de negócio)
+- projetar do último dia disponível de cada produto até o final do mês alvo
+- funcionar automaticamente para todos os produtos (sem ajustes manuais)
+
+========================================
+OBJETIVO
+========================================
+
+Construir um motor completo de previsão que combine múltiplos métodos, com seleção automática e melhoria contínua via backtest.
+
+========================================
+REQUISITOS OBRIGATÓRIOS (MODELO)
+========================================
+
+O código DEVE implementar TODOS os pontos abaixo:
+
+1) Normalização da base
+- série diária contínua por produto
+- preencher dias faltantes com zero
+- criação de features:
+  - dia do mês
+  - dia da semana
+  - semana do mês
+  - mês e ano
+
+----------------------------------------
+
+2) Curva intra-mensal
+- calcular % acumulado diário por mês histórico
+- usar mediana como curva final
+- usar isso para projetar o total do mês
+
+----------------------------------------
+
+3) Run rate inteligente
+- média móvel dos últimos dias (ex: 5 dias)
+- considerar padrão por dia da semana
+
+----------------------------------------
+
+4) Modelo estatístico
+- regressão (Ridge ou similar)
+- features temporais (dow, semana do mês)
+- previsão dos dias futuros
+
+----------------------------------------
+
+5) Combinação dos métodos
+- curva intra-mensal
+- run rate
+- modelo estatístico
+
+IMPORTANTE:
+- NÃO usar pesos fixos
+- calibrar pesos automaticamente via backtest por produto
+
+----------------------------------------
+
+6) Backtest (OBRIGATÓRIO)
+- simular previsões no passado (dias 5, 10, 15, 20)
+- calcular erro (MAPE)
+- usar isso para:
+  - escolher melhor janela de treino (3, 6, 12 meses)
+  - calibrar pesos da combinação
+
+----------------------------------------
+
+7) Intermitência (CRÍTICO)
+- detectar produtos com muitos zeros (>40%)
+- aplicar modelo Croston (ou TSB simplificado)
+- integrar isso à projeção
+
+----------------------------------------
+
+8) Volume (CRÍTICO)
+- classificar produtos:
+  - baixo volume
+  - alto volume
+- aplicar lógica diferente:
+  - baixo volume → métodos mais robustos/simples
+  - alto volume → modelo completo
+
+----------------------------------------
+
+9) Hierarquia (CRÍTICO)
+- projetar produtos
+- projetar família
+- reconciliar:
+  - soma dos produtos = total da família
+
+----------------------------------------
+
+10) Explicabilidade (MUITO IMPORTANTE)
+Para cada produto, gerar texto explicando:
+
+- qual modelo pesou mais
+- qual janela foi escolhida
+- se foi tratado como intermitente
+- comportamento recente (aceleração / desaceleração)
+- por que a projeção mudou vs histórico
+
+========================================
+OUTPUTS
+========================================
+
+O código deve gerar:
+
+1) DataFrame final com:
+- familia
+- produto
+- realizado no mês
+- projetado
+- erro histórico (backtest)
+- método dominante
+
+----------------------------------------
+
+2) Base diária completa com:
+- valores reais
+- valores projetados
+
+----------------------------------------
+
+3) Métricas de acurácia:
+- MAPE por produto
+- MAPE por família
+
+========================================
+STREAMLIT (OBRIGATÓRIO)
+========================================
+
+No final, o código deve gerar um app Streamlit com:
+
+----------------------------------------
+VISÃO FAMÍLIA
+----------------------------------------
+
+- gráfico diário (linha)
+- gráfico mensal (linha)
+
+----------------------------------------
+VISÃO PRODUTO
+----------------------------------------
+
+- gráfico diário (linha)
+- gráfico mensal (linha)
+
+----------------------------------------
+REGRAS VISUAIS (CRÍTICO)
+----------------------------------------
+
+- Realizado → linha preta (forte)
+- Projetado → linha cinza clara
+- Backtest → linha azul tracejada (começando em M-1)
+
+Design:
+- executivo
+- clean
+- sem poluição visual
+- fundo branco
+- grid leve
+
+----------------------------------------
+
+4) EXPLICAÇÃO VISUAL NO APP
+
+Para cada produto mostrar:
+
+- explicação textual clara (em linguagem de negócio)
+- qual modelo funcionou melhor
+- por que a projeção atual é diferente
+
+----------------------------------------
+
+5) ACURÁCIA VISUAL
+
+- gráfico de erro por produto
+- ranking de produtos mais/menos previsíveis
+
+========================================
+EXIGÊNCIAS DE CÓDIGO
+========================================
+
+- código modular (funções bem separadas)
+- totalmente comentado
+- explicação didática EXTREMAMENTE detalhada
+
+CRÍTICO:
+Cada bloco do código deve ter no mínimo 2 parágrafos explicando:
+- o que está sendo feito
+- por que isso é importante no contexto de negócio
+
+----------------------------------------
+
+- código deve rodar standalone
+- sem dependências complexas
+- usar:
+  - pandas
+  - numpy
+  - matplotlib ou plotly
+  - sklearn
+  - streamlit
+
+========================================
+IMPORTANTE
+========================================
+
+- NÃO simplifique nada
+- NÃO remova nenhuma das melhorias
+- NÃO entregue algo genérico
+- pense como cientista de dados sênior em banco
+
+Se o código ficar muito grande:
+- divida em partes (Parte 1, Parte 2, etc.)
+- mas mantenha continuidade perfeita
+
+========================================
+ENTREGA FINAL
+========================================
+
+Me entregue:
+
+1) código completo Python
+2) pronto para rodar
+3) com Streamlit incluso
+4) com todos os comentários explicativos
+5) com todas as melhorias implementadas
+
+Esse código será usado em ambiente corporativo, então precisa estar:
+- robusto
+- confiável
+- explicável
